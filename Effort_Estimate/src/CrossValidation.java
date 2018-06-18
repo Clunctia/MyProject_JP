@@ -8,7 +8,7 @@ import java.io.IOException;
 
 
 public class CrossValidation {
-	static String fileLocation = "D:\\Weka Jar\\weka-3-8-2\\data\\miyazaki94.arff";
+	static String fileLocation = "./miyazaki94.arff";
 
 	public static void main(String[]args) {
 		try {

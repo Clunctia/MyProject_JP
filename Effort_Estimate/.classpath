@@ -2,9 +2,10 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="D:/Weka Jar/weka-3-8-2/weka.jar"/>
-	<classpathentry kind="lib" path="D:/Weka Jar/core.jar"/>
-	<classpathentry kind="lib" path="D:/Weka Jar/mtj.jar"/>
-	<classpathentry kind="lib" path="D:/Weka Jar/arpack_combined.jar"/>
+	<classpathentry kind="src" path="data"/>
+	<classpathentry kind="lib" path="D:/JP Internship/Java/Effort_Estimate/Effort_Estimate/JAR/arpack_combined.jar"/>
+	<classpathentry kind="lib" path="D:/JP Internship/Java/Effort_Estimate/Effort_Estimate/JAR/core.jar"/>
+	<classpathentry kind="lib" path="D:/JP Internship/Java/Effort_Estimate/Effort_Estimate/JAR/mtj.jar"/>
+	<classpathentry kind="lib" path="D:/JP Internship/Java/Effort_Estimate/Effort_Estimate/JAR/weka.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
