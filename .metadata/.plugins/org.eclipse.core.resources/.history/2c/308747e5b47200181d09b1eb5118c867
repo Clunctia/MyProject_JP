@@ -34,14 +34,12 @@ public class CrossValidation {
 	}
 }
 
-/* 
+/*
  * Note to do:
- * Show mean absolute error with cross validation.
- * Try to use another modeling method.
- * SVM - has several parameters to be tuned.
- * Compare performance between SVM and LinearRegression.
- * 
- * 
+Show mean absolute error with cross validation.
+Try to use another modeling method.
+SVM - has several parameters to be tuned.
+Compare performance between SVM and LinearRegression.
  */
 
 
