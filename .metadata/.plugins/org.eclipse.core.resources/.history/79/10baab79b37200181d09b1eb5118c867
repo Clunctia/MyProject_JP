@@ -13,11 +13,11 @@ public class CrossValidation {
 	public static void main(String[]args) {
 		try {
 			
-			//Load Data from the file
-			DataSource source = new DataSource(fileLocation);
+			
+			DataSource source = new DataSource("D:\\Weka Jar\\weka-3-8-2\\data\\miyazaki94.arff");
 			Instances dataset = source.getDataSet();
 			
-			
+			System.out.println(dataset);		
 			dataset.setClassIndex(dataset.numAttributes()-1);
 			
 			System.out.println("---------------------------------------");
