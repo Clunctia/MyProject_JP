@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="weka.core.converters.CSVLoader"/>
+<fullyQualifiedTypeName name="weka.classifiers.functions.LinearRegression"/>
+<fullyQualifiedTypeName name="weka.core.converters.ConverterUtils.DataSource"/>
+<fullyQualifiedTypeName name="weka.core.matrix.LinearRegression"/>
+</qualifiedTypeNameHistroy>

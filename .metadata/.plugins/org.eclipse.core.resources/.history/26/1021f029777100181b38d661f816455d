@@ -1,0 +1,9 @@
+import weka.core.Instances;
+import weka.core.converters.ArffLoader;
+import weka.core.converters.CSVSaver;
+
+
+
+public class Arff2CSV {
+
+}
