@@ -1,5 +1,6 @@
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
+import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.functions.LinearRegression;
 
 
@@ -21,12 +22,14 @@ public class CrossValidation {
 			dataset.setClassIndex(dataset.numAttributes()-1);
 			
 			System.out.println("---------------------------------------");
-
+			System.out.println("------------Do Linear Regression--------------");
+			
 			LinearRegression lr = new LinearRegression();
 			lr.buildClassifier(dataset);
-
+			
 			System.out.println(lr);
 			
+			Evaluation eval = new Evaluation(dataset);
 			
 		} catch (Exception e) {
 		}
