@@ -13,22 +13,24 @@ public class CrossValidation {
 
 	public static void main(String[]args) {
 		try {
-			
 			//Load Data from the file
 			DataSource source = new DataSource(fileLocation);
+			//Set instance from source data.
 			Instances dataset = source.getDataSet();
-			
-			
+			//Set the index of the data set
 			dataset.setClassIndex(dataset.numAttributes()-1);
 			
 			System.out.println("---------------------------------------");
 			System.out.println("------------Do Linear Regression--------------");
 			
+			//Call for Linear Regression model to train the model with the data.
 			LinearRegression lr = new LinearRegression();
 			lr.buildClassifier(dataset);
 			
 			System.out.println(lr);
 			
+			System.out.println("--------------------------------------");
+			//Bring the dataset to the evaluation.
 			Evaluation eval = new Evaluation(dataset);
 			
 		} catch (Exception e) {
@@ -44,6 +46,11 @@ public class CrossValidation {
  * SVM - has several parameters to be tuned.
  * Compare performance between SVM and LinearRegression.
  * 
+ * 1. Read miyazaki94.arff data from Java code (you can find a function or a class in Weka for that purpose)
+ * 2. Call LinearRegression of Weka from your Java code to train a model with the data.
+ * 3. Estimate effort values of the data with the trained model
+ * 4. Calculate absolute errors between the estimate and actual effort values.
+ * At 2 and 3, it is better to use cross-validation if you can (this is not a mandatory task for the present)
  * 
  */
 
