@@ -31,7 +31,7 @@ public class CrossValidation {
 			
 			System.out.println(lr);
 			
-			System.out.println("-----------Do Evaluation Model---------------------------");
+			System.out.println("-----------Do Evaluate Model---------------------------");
 		
 			//Bring the dataset to the evaluation.
 			Evaluation eval = new Evaluation(dataset);
