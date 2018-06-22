@@ -4,4 +4,5 @@
 <fullyQualifiedTypeName name="weka.classifiers.functions.LinearRegression"/>
 <fullyQualifiedTypeName name="weka.core.converters.ConverterUtils.DataSource"/>
 <fullyQualifiedTypeName name="weka.core.matrix.LinearRegression"/>
+<fullyQualifiedTypeName name="weka.classifiers.evaluation.Evaluation"/>
 </qualifiedTypeNameHistroy>

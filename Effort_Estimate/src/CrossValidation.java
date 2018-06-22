@@ -1,3 +1,4 @@
+import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.classifiers.evaluation.Evaluation;
@@ -6,6 +7,7 @@ import weka.classifiers.functions.LinearRegression;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 
 public class CrossValidation {
@@ -17,7 +19,7 @@ public class CrossValidation {
 			DataSource source = new DataSource(fileLocation);
 			//Set instance from source data.
 			Instances dataset = source.getDataSet();
-			//Set the index of the data set
+			//Set the index of the data set to the last attribute
 			dataset.setClassIndex(dataset.numAttributes()-1);
 			
 			System.out.println("---------------------------------------");
@@ -29,9 +31,22 @@ public class CrossValidation {
 			
 			System.out.println(lr);
 			
-			System.out.println("--------------------------------------");
+			System.out.println("-----------Do Evaluate Model---------------------------");
+		
 			//Bring the dataset to the evaluation.
 			Evaluation eval = new Evaluation(dataset);
+			eval.evaluateModel(lr, dataset);
+			System.out.println(eval.toSummaryString("Evaluation result: \n", false));
+			
+			System.out.println("-----------Do 10 folds cross validation model---------------------------");
+			
+			Evaluation crossEval = new Evaluation(dataset);
+			Random rand = new Random(1);
+			int folds = 10;
+			crossEval.crossValidateModel(lr, dataset, folds, rand);
+			System.out.println(crossEval.toSummaryString("10 folds Cross Validation result: \n", false));
+			
+			System.out.println("--------------------------------------");
 			
 		} catch (Exception e) {
 		}
