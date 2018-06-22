@@ -49,10 +49,8 @@ public class CrossValidation {
 
 			System.out.println("--------------------------------------");
 			System.out.println();
-			
 			System.out.println("Or maybe this way....");
-			
-			//this is just a test from the youtube WEKA API tutorial I try to find the way to handle the numeric class
+			//this is just a test from the youtube I try to find the way to handle the numeric class
 			DataSource source2 = new DataSource("./iris.arff");
 			Instances dataset2 = source2.getDataSet();
 			dataset2.setClassIndex(dataset2.numAttributes()-1);
