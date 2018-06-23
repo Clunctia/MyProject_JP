@@ -1,0 +1,17 @@
+import weka.core.Instances;
+import weka.core.converters.ConverterUtils.DataSource;
+
+public class ClassifyInstance {
+	public static void main (String[]args) {
+		try {
+			DataSource source = new DataSource("");
+			Instances trainDataset = source.getDataSet();
+			trainDataset.setClassIndex(trainDataset.numAttributes()-1);
+			//get number of classes
+			int numClasses = trainDataset.numClasses();
+			
+		}catch (Exception e) {
+			
+		}
+	}
+}

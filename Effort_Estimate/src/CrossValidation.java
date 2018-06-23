@@ -1,9 +1,7 @@
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
-import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.functions.LinearRegression;
-
 
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +14,7 @@ public class CrossValidation {
 	public static void main(String[]args) {
 		try {
 			//Load Data from the file
+			System.out.println("Start the program");
 			DataSource source = new DataSource(fileLocation);
 			//Set instance from source data.
 			Instances dataset = source.getDataSet();
@@ -28,7 +27,8 @@ public class CrossValidation {
 			//Call for Linear Regression model to train the model with the data.
 			LinearRegression lr = new LinearRegression();
 			lr.buildClassifier(dataset);
-
+			
+			System.out.println("The result of Linear Regression");
 			System.out.println(lr);
 
 			System.out.println("-----------Do Evaluation Model---------------------------");
@@ -47,7 +47,17 @@ public class CrossValidation {
 			System.out.println(crossEval.toSummaryString("10 folds Cross Validation result: \n", false));
 
 			System.out.println("--------------------------------------");
-			System.out.println("End of the Program");
+			System.out.println("Try to get the actual value of the test data");
+			DataSource sourceData = new DataSource(fileLocation);
+			Instances testDataset = sourceData.getDataSet();
+			testDataset.setClassIndex(testDataset.numAttributes()-1);
+			
+			System.out.println("=========");
+			System.out.println("Actual Class, Somthing predicted");
+			
+			
+			
+			System.out.println("------------End of the Program-------------");
 
 		} catch (Exception e) {
 			System.out.println("Error occur: " + e);

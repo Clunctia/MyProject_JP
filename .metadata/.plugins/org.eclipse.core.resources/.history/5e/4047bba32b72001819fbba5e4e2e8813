@@ -1,6 +1,0 @@
-import weka.clusterers.*;
-public class CrossValidation {
-	public static void main(String[]args) {
-		
-	}
-}

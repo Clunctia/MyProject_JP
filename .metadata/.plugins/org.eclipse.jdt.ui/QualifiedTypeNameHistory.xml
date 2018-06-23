@@ -5,4 +5,6 @@
 <fullyQualifiedTypeName name="weka.core.converters.ConverterUtils.DataSource"/>
 <fullyQualifiedTypeName name="weka.core.matrix.LinearRegression"/>
 <fullyQualifiedTypeName name="weka.classifiers.evaluation.Evaluation"/>
+<fullyQualifiedTypeName name="java.util.Random"/>
+<fullyQualifiedTypeName name="weka.classifiers.bayes.NaiveBayes"/>
 </qualifiedTypeNameHistroy>

@@ -1,0 +1,12 @@
+import weka.core.converters.ConverterUtils.DataSource;
+
+public class ClassifyInstance {
+	public static void main (String[]args) {
+		try {
+			DataSource source = new DataSource("");
+			Instances trainDataset = source.getDataSet();
+		}catch (Exception e) {
+			
+		}
+	}
+}
