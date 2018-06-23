@@ -9,7 +9,7 @@ import java.util.Random;
 
 
 public class CrossValidation {
-	static String fileLocation = "./miyazaki94.arff";
+	static String fileLocation = "./data/miyazaki94.arff";
 
 	public static void main(String[]args) {
 		try {
@@ -48,12 +48,6 @@ public class CrossValidation {
 
 			System.out.println("--------------------------------------");
 			System.out.println("Try to get the actual value of the test data");
-			DataSource sourceData = new DataSource(fileLocation);
-			Instances testDataset = sourceData.getDataSet();
-			testDataset.setClassIndex(testDataset.numAttributes()-1);
-			
-			System.out.println("=========");
-			System.out.println("Actual Class, Somthing predicted");
 			
 			
 			

@@ -1,9 +1,7 @@
-import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.functions.LinearRegression;
-
 
 import java.io.File;
 import java.io.IOException;
@@ -16,37 +14,47 @@ public class CrossValidation {
 	public static void main(String[]args) {
 		try {
 			//Load Data from the file
-			DataSource source = new DataSource(fileLocation);
+			System.out.println("Start the program");
+			DataSource source = new DataSource("./miyazaki94.arff");
 			//Set instance from source data.
 			Instances dataset = source.getDataSet();
 			//Set the index of the data set to the last attribute
 			dataset.setClassIndex(dataset.numAttributes()-1);
-			
+
 			System.out.println("---------------------------------------");
 			System.out.println("------------Do Linear Regression--------------");
-			
+
 			//Call for Linear Regression model to train the model with the data.
 			LinearRegression lr = new LinearRegression();
 			lr.buildClassifier(dataset);
 			
+			System.out.println("The result of Linear Regression");
 			System.out.println(lr);
-			
-			System.out.println("--------------------------------------");
-		
+
+			System.out.println("-----------Do Evaluation Model---------------------------");
+
 			//Bring the dataset to the evaluation.
 			Evaluation eval = new Evaluation(dataset);
-			//eval.evaluateModel(lr, dataset);
-			//System.out.println(eval.toSummaryString("Evaluation result: \n", false));
-			
-			
+			eval.evaluateModel(lr, dataset);
+			System.out.println(eval.toSummaryString("Evaluation result: \n", false));
+
+			System.out.println("-----------Do 10 folds cross validation model---------------------------");
+
+			Evaluation crossEval = new Evaluation(dataset);
 			Random rand = new Random(1);
 			int folds = 10;
-			eval.crossValidateModel(lr, dataset, folds, rand);
-			System.out.println(eval.toSummaryString("10 folds Cross Validation result: \n", false));
+			crossEval.crossValidateModel(lr, dataset, folds, rand);
+			System.out.println(crossEval.toSummaryString("10 folds Cross Validation result: \n", false));
+
+			System.out.println("--------------------------------------");
+			System.out.println("Try to get the actual value of the test data");
 			
 			
 			
+			System.out.println("------------End of the Program-------------");
+
 		} catch (Exception e) {
+			System.out.println("Error occur: " + e);
 		}
 
 	}
