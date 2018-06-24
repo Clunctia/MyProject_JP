@@ -69,9 +69,13 @@ public class CrossValidation {
  * 
  * 1. Read miyazaki94.arff data from Java code (you can find a function or a class in Weka for that purpose) Checked
  * 2. Call LinearRegression of Weka from your Java code to train a model with the data. Checked
- * 3. Estimate effort values of the data with the trained model. Unchecked
- * 4. Calculate absolute errors between the estimate and actual effort values. Unchecked
+ * 3. Estimate effort values of the data with the trained model. Unchecked Can't understand 
+ * 4. Calculate absolute errors between the estimate and actual effort values. Unchecked Can't do
  * At 2 and 3, it is better to use cross-validation if you can (this is not a mandatory task for the present)
+ * 
+ * 
+ * Question
+ * Do i need to remove the ID attribute in the data file?
  * 
  */
 
