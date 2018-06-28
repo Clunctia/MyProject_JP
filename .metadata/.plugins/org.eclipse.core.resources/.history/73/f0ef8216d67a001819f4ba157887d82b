@@ -63,7 +63,7 @@ public class CrossValidation {
 			System.out.println("--------------------------------------");
 			System.out.println("Try Support Vector Machine aka SVM");
 			
-			LibSVM lib = new LibSVM();
+			LibSVMLoader svm = new LibSVMLoader();
 			
 			System.out.println("------------End of the Program-------------");
 

@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="D:/JP Internship/Java/Effort_Estimate/Effort_Estimate/JAR/mtj.jar"/>
 	<classpathentry kind="lib" path="D:/JP Internship/Java/Effort_Estimate/Effort_Estimate/JAR/weka.jar"/>
 	<classpathentry kind="src" path="weka-3-8-2-data"/>
+	<classpathentry kind="lib" path="D:/JP Internship/Java/Effort_Estimate/Effort_Estimate/JAR/libsvm.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
