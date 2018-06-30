@@ -2,7 +2,6 @@ import weka.core.Instances;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.RemoveByName;
 import weka.core.converters.ConverterUtils.DataSource;
-import weka.core.converters.LibSVMLoader;
 import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.functions.LinearRegression;
 import weka.classifiers.functions.LibSVM;
@@ -63,7 +62,11 @@ public class CrossValidation {
 			System.out.println("--------------------------------------");
 			System.out.println("Try Support Vector Machine aka SVM");
 			
-			LibSVM lib = new LibSVM();
+			LibSVM svm = new LibSVM();
+			svm.buildClassifier(dataset);
+			System.out.println("Result of the libSVM buildClassifier just want to know.");
+			
+			
 			
 			System.out.println("------------End of the Program-------------");
 
@@ -87,10 +90,10 @@ public class CrossValidation {
  * Do i need to remove the ID attribute in the data file?
  * 
  * -Done-
- * 1. Read miyazaki94.arff data from Java code (you can find a function or a class in Weka for that purpose) Checked
- * 2. Call LinearRegression of Weka from your Java code to train a model with the data. Checked
- * 3. Estimate effort values of the data with the trained model. Unchecked Can't understand 
- * 4. Calculate absolute errors between the estimate and actual effort values. Unchecked Can't do
+ * 1. Read miyazaki94.arff data from Java code (you can find a function or a class in Weka for that purpose)
+ * 2. Call LinearRegression of Weka from your Java code to train a model with the data.
+ * 3. Estimate effort values of the data with the trained model.
+ * 4. Calculate absolute errors between the estimate and actual effort values.
  * At 2 and 3, it is better to use cross-validation if you can (this is not a mandatory task for the present)
  */
 
