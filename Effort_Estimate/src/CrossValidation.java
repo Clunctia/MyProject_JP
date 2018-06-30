@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class CrossValidation {
 	static String fileLocation = "./data/miyazaki94.arff";
-	
+
 
 	public static void main(String[]args) {
 		try {
@@ -35,7 +35,7 @@ public class CrossValidation {
 			//Call for Linear Regression model to train the model with the data.
 			LinearRegression lr = new LinearRegression();
 			lr.buildClassifier(dataset);
-			
+
 			System.out.println("The result of Linear Regression");
 			System.out.println(lr);
 
@@ -51,23 +51,23 @@ public class CrossValidation {
 			//use dataset after linear regression
 			Random rand = new Random(1);
 			int folds = 10;
-//			eval.crossValidateModel(lr, dataset, folds, rand);
-//			System.out.println(eval.toSummaryString("10 folds Cross Validation result: \n", false));
-			
+			//			eval.crossValidateModel(lr, dataset, folds, rand);
+			//			System.out.println(eval.toSummaryString("10 folds Cross Validation result: \n", false));
+
 			Evaluation crossEval = new Evaluation(dataset);
 			System.out.println("-------------------------------------------------------------------------");
 			crossEval.crossValidateModel(lr, dataset, folds, rand);
 			System.out.println(crossEval.toSummaryString("10 folds Cross Validation result: \n", false));
-			
+
 			System.out.println("--------------------------------------");
 			System.out.println("Try Support Vector Machine aka SVM");
-			
+
 			LibSVM svm = new LibSVM();
 			svm.buildClassifier(dataset);
 			System.out.println("Result of the libSVM buildClassifier just want to know.");
-			
-			
-			
+
+
+
 			System.out.println("------------End of the Program-------------");
 
 		} catch (Exception e) {
@@ -76,6 +76,15 @@ public class CrossValidation {
 
 	}
 }
+
+/*
+ * Kasidid Comment
+ * About SVM
+ * Because we use weka ver 3.8.2 it need to use the SVM Wrapper when it greater than ver 3.7.2 this version I use is latest ver 1.0.10
+ * I don't know the correct setting of this version but this work for now I think
+ */
+
+
 
 /* 
  * Note to do:

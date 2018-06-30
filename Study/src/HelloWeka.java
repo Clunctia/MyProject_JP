@@ -1,15 +1,17 @@
-import java.util.Random;
-
+import weka.core.Instances;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.RemoveByName;
+import weka.core.converters.ConverterUtils.DataSource;
 import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.functions.LinearRegression;
 import weka.classifiers.functions.LibSVM;
-import weka.core.Instances;
-import weka.core.converters.ConverterUtils.DataSource;
-import weka.filters.Filter;
-import weka.filters.unsupervised.attribute.RemoveByName;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Random;
 
 
-public class LibSVM {
+public class HelloWeka {
 	static String fileLocation = "./data/miyazaki94.arff";
 	
 
@@ -61,7 +63,7 @@ public class LibSVM {
 			System.out.println("Try Support Vector Machine aka SVM");
 			
 			LibSVM svm = new LibSVM();
-			
+			svm.buildClassifier(dataset);
 			System.out.println("Result of the libSVM buildClassifier just want to know.");
 			
 			
