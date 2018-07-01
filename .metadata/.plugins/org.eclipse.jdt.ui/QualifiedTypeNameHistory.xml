@@ -8,9 +8,10 @@
 <fullyQualifiedTypeName name="weka.core.converters.ConverterUtils.DataSource"/>
 <fullyQualifiedTypeName name="weka.core.Instances"/>
 <fullyQualifiedTypeName name="weka.classifiers.bayes.NaiveBayes"/>
-<fullyQualifiedTypeName name="java.lang.System"/>
 <fullyQualifiedTypeName name="weka.filters.unsupervised.attribute.RemoveByName"/>
 <fullyQualifiedTypeName name="weka.filters.Filter"/>
 <fullyQualifiedTypeName name="libsvm.svm"/>
+<fullyQualifiedTypeName name="java.lang.System"/>
+<fullyQualifiedTypeName name="weka.classifiers.AbstractClassifier"/>
 <fullyQualifiedTypeName name="weka.classifiers.functions.LibSVM"/>
 </qualifiedTypeNameHistroy>
