@@ -63,6 +63,7 @@ public class CrossValidation {
 			System.out.println("Try Support Vector Machine aka SVM");
 
 			LibSVM svm = new LibSVM();
+			//got an error because did't set type of the LibSVM
 			svm.buildClassifier(dataset);
 			System.out.println("Result of the libSVM buildClassifier just want to know.");
 
@@ -81,22 +82,18 @@ public class CrossValidation {
  * Kasidid Comment
  * About SVM
  * Because we use weka ver 3.8.2 it need to use the SVM Wrapper when it greater than ver 3.7.2 this version I use is latest ver 1.0.10
- * I don't know the correct setting of this version but this work for now I think
+ * I don't know the correct setting of this version.
+ * As for now I read on the wiki I need to set the data type of the LibSVM to support the data from arff file.
  */
 
-
-
 /* 
- * Note to do:
+ * NOTE To Do:
  * Show mean absolute error with cross validation.
  * Try to use another modeling method.
  * SVM = Support Vector Machine
  * SVM - has several parameters to be tuned.
  *  - On Cross validation
  * Compare performance between SVM and LinearRegression. 
- * 
- * Question
- * Do i need to remove the ID attribute in the data file?
  * 
  * -Done-
  * 1. Read miyazaki94.arff data from Java code (you can find a function or a class in Weka for that purpose)
