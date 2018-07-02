@@ -12,7 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
-public class CrossValidation {
+public class StudyOnWeka {
 	static String fileLocation = "./data/miyazaki94.arff";
 
 	public static void main(String[] args) {
