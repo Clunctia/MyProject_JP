@@ -17,8 +17,8 @@ public class StudyOnWeka {
 
 	public static void main(String[] args) {
 		try {
-			// Load Data from the file
 			System.out.println("Start the program");
+			//Load source file to the program
 			DataSource source = new DataSource(fileLocation);
 			// Set instance from source data.
 			Instances datasetX = source.getDataSet();
@@ -29,8 +29,7 @@ public class StudyOnWeka {
 			// Set the index of the data set to the last attribute
 			dataset.setClassIndex(dataset.numAttributes() - 1);
 
-			System.out.println("---------------------------------------");
-			System.out.println("------------Do Linear Regression--------------");
+			System.out.println("--------------------------Do Linear Regression---------------------------");
 
 			// Call for Linear Regression model to train the model with the data.
 			LinearRegression lr = new LinearRegression();
@@ -39,8 +38,8 @@ public class StudyOnWeka {
 			System.out.println("The result of Linear Regression");
 			System.out.println(lr);
 
-			System.out.println("-----------Do Evaluation Model---------------------------");
-
+			System.out.println("--------------------------Do Evaluation Model----------------------------");
+			
 			// Bring the dataset to the evaluation.
 			Evaluation eval = new Evaluation(dataset);
 			eval.evaluateModel(lr, dataset);
@@ -51,28 +50,27 @@ public class StudyOnWeka {
 			// use dataset after linear regression
 			Random rand = new Random(1);
 			int folds = 10;
-			// eval.crossValidateModel(lr, dataset, folds, rand);
-			// System.out.println(eval.toSummaryString("10 folds Cross Validation result:
-			// \n", false));
-
 			Evaluation crossEval = new Evaluation(dataset);
-			System.out.println("-------------------------------------------------------------------------");
 			crossEval.crossValidateModel(lr, dataset, folds, rand);
 			System.out.println(crossEval.toSummaryString("10 folds Cross Validation result: \n", false));
 
 			System.out.println("--------------------------------------");
 			System.out.println("Try Support Vector Machine aka SVM");
-
+			//Import LibSVM
 			LibSVM svm = new LibSVM();
-			// got an error because did't set type of the LibSVM
+			//Set the data type of the LibSVM from the SelectedTag function to handle the numeric data.
 			svm.setSVMType(new SelectedTag(LibSVM.SVMTYPE_EPSILON_SVR, LibSVM.TAGS_SVMTYPE));
 			svm.buildClassifier(dataset);
-
+			
+			//Use cross validation to evaluate the result from the Lib SVM
 			Evaluation crossEval2 = new Evaluation(dataset);
 			System.out.println("-------------------------------------------------------------------------");
 			crossEval2.crossValidateModel(svm, dataset, folds, rand);
 			System.out.println(crossEval2.toSummaryString("10 folds Cross Validation with SVM result: \n", false));
-
+			System.out.println("-------------------------------------------------------------------------");
+			
+			//Tuning the Parameter of the LibSVM for better performance.
+			
 			System.out.println("------------End of the Program-------------");
 
 		} catch (Exception e) {
