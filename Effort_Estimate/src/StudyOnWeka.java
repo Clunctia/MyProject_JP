@@ -5,6 +5,7 @@ import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.functions.LinearRegression;
 import weka.classifiers.functions.LibSVM;
 import weka.classifiers.meta.CVParameterSelection;
+import weka.classifiers.meta.GridSearch;
 
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.RemoveByName;
@@ -74,7 +75,7 @@ public class StudyOnWeka {
 			System.out.println("-------------Use CVParameterSelection---------------");
 			CVParameterSelection cvp = new CVParameterSelection();
 			cvp.buildClassifier(dataset);
-			
+			GridSearch grid = new GridSearch();
 			
 			System.out.println("------------End of the Program-------------");
 

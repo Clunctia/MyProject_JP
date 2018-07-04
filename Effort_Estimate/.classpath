@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="D:/JP Internship/Java/Effort_Estimate/Effort_Estimate/JAR/LibSVMWrapper/LibSVM.jar"/>
 	<classpathentry kind="lib" path="D:/JP Internship/Java/Effort_Estimate/Effort_Estimate/JAR/LibSVM.jar"/>
 	<classpathentry kind="lib" path="D:/JP Internship/Java/Effort_Estimate/Effort_Estimate/JAR/weka-Develop/weka.jar"/>
+	<classpathentry kind="lib" path="D:/JP Internship/Java/Effort_Estimate/Effort_Estimate/JAR/gridSearch-1.0.11.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
