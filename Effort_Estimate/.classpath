@@ -6,9 +6,9 @@
 	<classpathentry kind="lib" path="D:/JP Internship/Java/Effort_Estimate/Effort_Estimate/JAR/arpack_combined.jar"/>
 	<classpathentry kind="lib" path="D:/JP Internship/Java/Effort_Estimate/Effort_Estimate/JAR/core.jar"/>
 	<classpathentry kind="lib" path="D:/JP Internship/Java/Effort_Estimate/Effort_Estimate/JAR/mtj.jar"/>
-	<classpathentry kind="lib" path="D:/JP Internship/Java/Effort_Estimate/Effort_Estimate/JAR/weka.jar"/>
 	<classpathentry kind="src" path="weka-3-8-2-data"/>
 	<classpathentry kind="lib" path="D:/JP Internship/Java/Effort_Estimate/Effort_Estimate/JAR/LibSVMWrapper/LibSVM.jar"/>
 	<classpathentry kind="lib" path="D:/JP Internship/Java/Effort_Estimate/Effort_Estimate/JAR/LibSVM.jar"/>
+	<classpathentry kind="lib" path="D:/JP Internship/Java/Effort_Estimate/Effort_Estimate/JAR/weka-Develop/weka.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

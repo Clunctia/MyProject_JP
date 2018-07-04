@@ -5,6 +5,7 @@ import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.functions.LinearRegression;
 import weka.classifiers.functions.LibSVM;
 import weka.classifiers.meta.CVParameterSelection;
+
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.RemoveByName;
 
@@ -68,8 +69,12 @@ public class StudyOnWeka {
 			crossEval2.crossValidateModel(svm, dataset, folds, rand);
 			System.out.println(crossEval2.toSummaryString("10 folds Cross Validation with SVM result: \n", false));
 			System.out.println("-------------------------------------------------------------------------");
-			
 			//Tuning the Parameter of the LibSVM for better performance.
+			
+			System.out.println("-------------Use CVParameterSelection---------------");
+			CVParameterSelection cvp = new CVParameterSelection();
+			cvp.buildClassifier(dataset);
+			
 			
 			System.out.println("------------End of the Program-------------");
 
