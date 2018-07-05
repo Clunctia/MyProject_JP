@@ -15,4 +15,7 @@
 <fullyQualifiedTypeName name="weka.classifiers.AbstractClassifier"/>
 <fullyQualifiedTypeName name="weka.classifiers.functions.LibSVM"/>
 <fullyQualifiedTypeName name="weka.core.SelectedTag"/>
+<fullyQualifiedTypeName name="weka.classifiers.meta.AdaBoostM1"/>
+<fullyQualifiedTypeName name="weka.core.Instance"/>
+<fullyQualifiedTypeName name="weka.core.Utils"/>
 </qualifiedTypeNameHistroy>

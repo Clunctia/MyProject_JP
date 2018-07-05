@@ -54,7 +54,8 @@ public class StudyOnWeka {
 			int folds = 10;
 			Evaluation crossEval = new Evaluation(dataset);
 			crossEval.crossValidateModel(lr, dataset, folds, rand);
-			System.out.println(crossEval.toSummaryString("10 folds Cross Validation result: \n", false));
+			System.out.println("10 folds Cross Validation result: ");
+			System.out.println(crossEval.toSummaryString());
 
 			System.out.println("--------------------------------------");
 			System.out.println("Try Support Vector Machine aka SVM");
@@ -64,18 +65,32 @@ public class StudyOnWeka {
 			svm.setSVMType(new SelectedTag(LibSVM.SVMTYPE_EPSILON_SVR, LibSVM.TAGS_SVMTYPE));
 			svm.buildClassifier(dataset);
 			
-			//Use cross validation to evaluate the result from the Lib SVM
-			Evaluation crossEval2 = new Evaluation(dataset);
+			//Use cross validation to evaluate the result from the LibSVM
 			System.out.println("-------------------------------------------------------------------------");
+			Evaluation crossEval2 = new Evaluation(dataset);
 			crossEval2.crossValidateModel(svm, dataset, folds, rand);
-			System.out.println(crossEval2.toSummaryString("10 folds Cross Validation with SVM result: \n", false));
+			System.out.println("10 folds cross validation result from LibSVM");
+			System.out.println(crossEval2.toSummaryString());
 			System.out.println("-------------------------------------------------------------------------");
 			//Tuning the Parameter of the LibSVM for better performance.
 			
 			System.out.println("-------------Use CVParameterSelection---------------");
 			CVParameterSelection cvp = new CVParameterSelection();
+			cvp.setClassifier(svm);
+			cvp.setNumFolds(folds);
+			cvp.addCVParameter("C 0.1 0.5 5");
+			
 			cvp.buildClassifier(dataset);
-			GridSearch grid = new GridSearch();
+			
+			Evaluation cvEvaluation = new Evaluation(dataset);
+			cvEvaluation.crossValidateModel(cvp, dataset, folds, rand);
+			System.out.println("10 folds cross validation result of CVParameterSelection");
+			System.out.println(cvEvaluation.toSummaryString());
+			
+			
+//			GridSearch grid = new GridSearch();
+//			grid.buildClassifier(dataset);
+			
 			
 			System.out.println("------------End of the Program-------------");
 
