@@ -76,9 +76,13 @@ public class StudyOnWeka {
 			
 			System.out.println("-------------Use CVParameterSelection---------------");
 			CVParameterSelection cvp = new CVParameterSelection();
+			
 			cvp.setClassifier(svm);
 			cvp.setNumFolds(folds);
 			cvp.addCVParameter("C 0.1 0.5 5");
+			//cvp.addCVParameter("P 0.1 1 1");
+			//cvp.addCVParameter("N 0.1 3 5");
+			
 			
 			cvp.buildClassifier(dataset);
 			
