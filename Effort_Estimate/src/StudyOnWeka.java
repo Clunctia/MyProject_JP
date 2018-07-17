@@ -1,5 +1,6 @@
 import weka.core.Instances;
 import weka.core.SelectedTag;
+import weka.core.Utils;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.functions.LinearRegression;
@@ -51,7 +52,7 @@ public class StudyOnWeka {
 
 			// use dataset after linear regression
 			Random rand = new Random(1);
-			int folds = 10;
+			int folds = 3;
 			Evaluation crossEval = new Evaluation(dataset);
 			crossEval.crossValidateModel(lr, dataset, folds, rand);
 			System.out.println("10 folds Cross Validation result: ");
@@ -79,19 +80,20 @@ public class StudyOnWeka {
 			
 			cvp.setClassifier(svm);
 			cvp.setNumFolds(folds);
-			cvp.addCVParameter("C 0.1 0.5 5");
-			//cvp.addCVParameter("P 0.1 1 1");
-			//cvp.addCVParameter("N 0.1 3 5");
 			
+			cvp.addCVParameter("G 1.0 10.0 100");
+			//cvp.addCVParameter("P 0.1 0.9 10");
 			
 			cvp.buildClassifier(dataset);
+			System.out.println(Utils.joinOptions(cvp.getBestClassifierOptions()));
 			
 			Evaluation cvEvaluation = new Evaluation(dataset);
 			cvEvaluation.crossValidateModel(cvp, dataset, folds, rand);
 			System.out.println("10 folds cross validation result of CVParameterSelection");
 			System.out.println(cvEvaluation.toSummaryString());
 			
-			
+			System.out.println("-------------------------------------------------------------------------");
+			System.out.println("-------------Use GridSearch---------------");
 //			GridSearch grid = new GridSearch();
 //			grid.buildClassifier(dataset);
 			
@@ -108,6 +110,8 @@ public class StudyOnWeka {
 /*
  * NOTE To Do:
  * 1. Tuning the SVM by using the CVParameter class form weka, GridSerarch. study on it.
+ * Build classifiers, edit that  classifiers parameter with the cvparameterselection
+ * Then apply it  with the svm after that evaluate it with the cross validation
  * 
  * -Done- 
  * 1. Read miyazaki94.arff data from Java code (you can find a function or a class in Weka for that purpose) 
