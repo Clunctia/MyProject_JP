@@ -22,3 +22,13 @@ public class HoldOutAndCrossValidation {
 	}
 
 }
+/*
+ * Your project is to answer the following question:
+ * Which of 10-fold CV or Hold-out is better to evaluate (and compare) effort estimation models.
+ * Fig.3 in the paper shows what functions should be implemented.
+ * The white boxes in the figure correspond to functions.
+ * "Model Construction" corresponds to building a Linear Regression model.
+ * "Performance Measurement" corresponds to calculating a mean absolute error.
+ * "Data Preparation for Performance Evaluation" corresponds to the techniques such as 10-fold CV and Hold-out.
+ * Please read the paper carefully, and try to implement the remained boxes.
+ */

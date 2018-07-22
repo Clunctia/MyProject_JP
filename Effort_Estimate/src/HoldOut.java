@@ -1,20 +1,30 @@
+import java.util.Random;
+import weka.classifiers.Classifier;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.RemoveByName;
 
 public class HoldOut {
-	static String fileLocation = "./data/miyazaki94.arff";
+	static String fileLocation;
+	static Instances dataset;
+	static int seed;
+	static int folds;
+	static Random rand;
+	static DataSource source;
+	static Classifier classiFier;
+	
+	
 	public static void main(String[]args) {
 		try {
 			
-			DataSource source = new DataSource(fileLocation);
+			source = new DataSource(fileLocation);
 			Instances dataset_ID = source.getDataSet();
 			RemoveByName rbName = new RemoveByName();
 			rbName.setExpression("ID");
 			rbName.setInputFormat(dataset_ID);
-			Instances dataset = Filter.useFilter(dataset_ID, rbName);
-			dataset.setClassIndex(dataset.numAttributes() - 1);
+			dataset = Filter.useFilter(dataset_ID, rbName);
+			dataset.setClassIndex(dataset.numAttributes()-1);
 			
 			
 			
@@ -22,5 +32,5 @@ public class HoldOut {
 			System.out.println("Error: " + e);
 		}
 	}
-	
+//	
 }
