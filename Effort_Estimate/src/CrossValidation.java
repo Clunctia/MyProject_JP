@@ -1,5 +1,6 @@
 import java.util.Random;
 import weka.classifiers.Classifier;
+import weka.classifiers.evaluation.Evaluation;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.filters.Filter;
@@ -25,9 +26,13 @@ public class CrossValidation {
 			dataset = Filter.useFilter(dataset_ID, rbName);
 			dataset.setClassIndex(dataset.numAttributes()-1);
 			
+			seed = 1;
+			folds = 10;
+			rand = new Random(seed);
 			
+			Evaluation crossEvaluation = new Evaluation(dataset);
 			
-			
+		
 		}catch (Exception e) {
 			System.out.println("Error: " + e);
 		}

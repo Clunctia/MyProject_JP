@@ -16,12 +16,6 @@ import java.io.IOException;
 import java.util.Random;
 
 public class HoldOutAndCrossValidation {
-	static String fileLocation = "./data/miyazaki94.arff";
-	public static void main(String[]args) {
-		
-	}
-
-}
 /*
  * Your project is to answer the following question:
  * Which of 10-fold CV or Hold-out is better to evaluate (and compare) effort estimation models.
@@ -32,3 +26,4 @@ public class HoldOutAndCrossValidation {
  * "Data Preparation for Performance Evaluation" corresponds to the techniques such as 10-fold CV and Hold-out.
  * Please read the paper carefully, and try to implement the remained boxes.
  */
+}
