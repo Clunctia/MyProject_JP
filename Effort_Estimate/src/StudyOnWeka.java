@@ -38,9 +38,6 @@ public class StudyOnWeka {
 			LinearRegression lr = new LinearRegression();
 			lr.buildClassifier(dataset);
 
-			System.out.println("The result of Linear Regression");
-			System.out.println(lr);
-
 			System.out.println("--------------------------Do Evaluation Model----------------------------");
 			
 			// Bring the dataset to the evaluation.
