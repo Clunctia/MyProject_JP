@@ -29,7 +29,7 @@ public class CrossValidation {
 			
 			seed = 1;
 			folds = 10;
-			rand = new Random(seed);
+			rand = new Random();
 			
 			LinearRegression lr = new LinearRegression();
 			lr.buildClassifier(dataset);
@@ -38,11 +38,13 @@ public class CrossValidation {
 			crossEvaluation.crossValidateModel(lr, dataset, folds, rand);
 			System.out.println(crossEvaluation.toSummaryString());
 			
-			System.out.println("Evaluation Linear Regression");
+			
+			System.out.println("Evaluate Linear Regression");
 			Evaluation evaluation = new Evaluation(dataset);
 			evaluation.evaluateModel(lr, dataset);
 			System.out.println(evaluation.toSummaryString());
-		
+			
+			
 		}catch (Exception e) {
 			System.out.println("Error: " + e);
 		}

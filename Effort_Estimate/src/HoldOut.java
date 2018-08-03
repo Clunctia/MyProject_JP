@@ -4,6 +4,8 @@ import weka.attributeSelection.HoldOutSubsetEvaluator;
 import weka.classifiers.Classifier;
 import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.functions.LinearRegression;
+import weka.core.DenseInstance;
+import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.filters.Filter;
@@ -11,6 +13,8 @@ import weka.filters.unsupervised.attribute.RemoveByName;
 import weka.filters.unsupervised.instance.Randomize;
 import weka.filters.unsupervised.instance.RemovePercentage;
 
+import java.util.Arrays;
+import org.apache.commons.lang3.ArrayUtils;
 public class HoldOut {
 	static String fileLocation = "./data/miyazaki94.arff";
 	static Instances dataset;
@@ -52,27 +56,38 @@ public class HoldOut {
 
 //			for(int i = 0 ; i < seed ; i++) {
 				Instances [] split = splitTrainTest(dataset, percent);
+				
+				//save to this 2 arrays
+				Instances train = split[0];
+				Instances test = split[1];
+				
+				//get the last column of the Instances array.
+				double[] actual_0 = train.attributeToDoubleArray(train.numAttributes()-1);
+				double[] actual_1= train.attributeToDoubleArray(test.numAttributes()-1);
+				
+				double[] actual = ArrayUtils.addAll(actual_0, actual_1);
 
 				LinearRegression lrTrain = new LinearRegression();
-				lrTrain.buildClassifier(split[0]);
+				lrTrain.buildClassifier(train);
 
-				Evaluation evalTrain = new Evaluation(split[0]);
-				evalTrain.evaluateModel(lrTrain, split[1]);
+				Evaluation evalTrain = new Evaluation(train);
+				double[] pred_0 = evalTrain.evaluateModel(lrTrain, test);
+				
 				System.out.println("Use Linear Regression to evaluate the holdout train data");
 				System.out.println(evalTrain.toSummaryString());
-
 				System.out.println("------------------------------------------------");
 
-
 				LinearRegression lrTest = new LinearRegression();
-				lrTest.buildClassifier(split[1]);
+				lrTest.buildClassifier(test);
 
-				Evaluation evalTest = new Evaluation(split[1]);
-				evalTest.evaluateModel(lrTrain, split[0]);
+				Evaluation evalTest = new Evaluation(test);
+				double[] pred_1 = evalTest.evaluateModel(lrTest, train);
+				
 				System.out.println("Use Linear Regression to evaluate the holdout test data");
 				System.out.println(evalTest.toSummaryString());
+				System.out.println();
 				
-				//Combine the sresult of evaluation train and test data.
+				double[] predict = ArrayUtils.addAll(pred_0, pred_1);
 				
 				
 				
@@ -110,4 +125,10 @@ public class HoldOut {
 
 
 	}
+	/*
+	 * Extract the last column of train and test data and combine
+	 * The combined actual data is used for evaluation of the combined prediction data
+	 * How to evaluate? -> Mean Absolute Error average of abs(pred[i] - act[i]) for all data 0 to i 
+	 * 
+	 */
 }

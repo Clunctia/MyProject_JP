@@ -4,12 +4,10 @@
 <fullyQualifiedTypeName name="weka.core.matrix.LinearRegression"/>
 <fullyQualifiedTypeName name="weka.classifiers.bayes.NaiveBayes"/>
 <fullyQualifiedTypeName name="libsvm.svm"/>
-<fullyQualifiedTypeName name="java.lang.System"/>
 <fullyQualifiedTypeName name="weka.classifiers.AbstractClassifier"/>
 <fullyQualifiedTypeName name="weka.classifiers.functions.LibSVM"/>
 <fullyQualifiedTypeName name="weka.core.SelectedTag"/>
 <fullyQualifiedTypeName name="weka.classifiers.meta.AdaBoostM1"/>
-<fullyQualifiedTypeName name="weka.core.Instance"/>
 <fullyQualifiedTypeName name="weka.core.Utils"/>
 <fullyQualifiedTypeName name="weka.core.Instances"/>
 <fullyQualifiedTypeName name="java.util.Random"/>
@@ -23,4 +21,7 @@
 <fullyQualifiedTypeName name="weka.filters.unsupervised.instance.Randomize"/>
 <fullyQualifiedTypeName name="weka.filters.unsupervised.instance.RemovePercentage"/>
 <fullyQualifiedTypeName name="weka.classifiers.functions.LinearRegression"/>
+<fullyQualifiedTypeName name="weka.core.DenseInstance"/>
+<fullyQualifiedTypeName name="java.lang.System"/>
+<fullyQualifiedTypeName name="weka.core.Instance"/>
 </qualifiedTypeNameHistroy>
