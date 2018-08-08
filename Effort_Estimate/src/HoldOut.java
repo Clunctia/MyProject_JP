@@ -18,10 +18,11 @@ import org.apache.commons.lang3.ArrayUtils;
 public class HoldOut {
 	static String fileLocation = "./data/miyazaki94.arff";
 	static Instances dataset;
-	static int seed;
+	static int repeat;
 	static int folds;
 	static Random rand;
 	static DataSource source;
+	static double[] resultAvg;
 
 	public static void main(String[]args) {
 		try {
@@ -34,64 +35,74 @@ public class HoldOut {
 			dataset = Filter.useFilter(dataset_ID, rbName);
 			dataset.setClassIndex(dataset.numAttributes()-1);
 
-			seed = 5;
+			repeat = 100;
 			folds = 10;
-			double percent = 50;
+			resultAvg = new double[repeat];
+			double percent = 50, result = 0, sum = 0;
+			double[] actual_0;
+			double[] actual_1;
+			double[] actual;
+			double[] pred_1;
+			double[] pred_0;
+			double[] predict;
+			Instances[] split;
+			Instances train, test;
+			LinearRegression lrTrain, lrTest;
 
-			//			for(int i=0 ; i<seed ; i++) {
-			//				Instances train = dataset.trainCV(folds, i);
-			//				Instances test = dataset.testCV(folds, i);
-			//			}
+			for(int i = 0 ; i < repeat ; i++) {
+				split = splitTrainTest(dataset, percent);
 
-
-
-			//			Print the information about the split data set the first one in the array is train data set and the second one is the test data set.
-			//			for(int i = 0 ; i < split.length ; i++ ) {
-			//				System.out.println(split[i].toString());
-			//				System.out.println(split[i].toSummaryString());
-			//			}
-
-			//			classiFier = new Classifier();
-			//			classiFier.buildClassifier(split[0]);
-
-//			for(int i = 0 ; i < seed ; i++) {
-				Instances [] split = splitTrainTest(dataset, percent);
-				
 				//save to this 2 arrays
-				Instances train = split[0];
-				Instances test = split[1];
-				
-				//get the last column of the Instances array.
-				double[] actual_0 = train.attributeToDoubleArray(train.numAttributes()-1);
-				double[] actual_1= train.attributeToDoubleArray(test.numAttributes()-1);
-				
-				double[] actual = ArrayUtils.addAll(actual_0, actual_1);
+				train = split[0];
+				test = split[1];
 
-				LinearRegression lrTrain = new LinearRegression();
+				//get the last column of the Instances array is it an actual value?.
+				actual_0 = train.attributeToDoubleArray(train.numAttributes()-1);
+				actual_1= test.attributeToDoubleArray(test.numAttributes()-1);
+
+				actual = ArrayUtils.addAll(actual_0, actual_1);
+
+				lrTrain = new LinearRegression();
 				lrTrain.buildClassifier(train);
 
+				//Predict
 				Evaluation evalTrain = new Evaluation(train);
-				double[] pred_0 = evalTrain.evaluateModel(lrTrain, test);
-				
+
+				pred_1 = evalTrain.evaluateModel(lrTrain, test);
+
 				System.out.println("Use Linear Regression to evaluate the holdout train data");
 				System.out.println(evalTrain.toSummaryString());
 				System.out.println("------------------------------------------------");
 
-				LinearRegression lrTest = new LinearRegression();
+				lrTest = new LinearRegression();
 				lrTest.buildClassifier(test);
 
+				//Predict?
 				Evaluation evalTest = new Evaluation(test);
-				double[] pred_1 = evalTest.evaluateModel(lrTest, train);
-				
+				pred_0 = evalTest.evaluateModel(lrTest, train);
+
 				System.out.println("Use Linear Regression to evaluate the holdout test data");
 				System.out.println(evalTest.toSummaryString());
-				System.out.println();
 				
-				double[] predict = ArrayUtils.addAll(pred_0, pred_1);
+
+				predict = ArrayUtils.addAll(pred_0, pred_1);
 				
-				
-				
-//			}
+				result = 0;
+				for(int j = 0 ; j < predict.length ; j++) {
+					result += Math.abs(predict[j]-actual[j]);
+				}
+
+				resultAvg[i] = result / actual.length;
+
+			}
+			
+			sum = 0;
+			for(int i = 0 ; i<resultAvg.length ; i++) {
+				sum += resultAvg[i];
+			}
+			sum = sum / resultAvg.length;
+			
+			System.out.println("The result of all loop: " + sum);
 
 		}catch (Exception e) {
 			System.out.println("Catch Error: " + e);
@@ -120,15 +131,5 @@ public class HoldOut {
 		return new Instances[] {train, test};
 	}
 
-	public static void holdOut(Classifier clf, Instances data, double p) {
-
-
-
-	}
-	/*
-	 * Extract the last column of train and test data and combine
-	 * The combined actual data is used for evaluation of the combined prediction data
-	 * How to evaluate? -> Mean Absolute Error average of abs(pred[i] - act[i]) for all data 0 to i 
-	 * 
-	 */
+	
 }
