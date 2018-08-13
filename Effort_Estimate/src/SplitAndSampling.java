@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -83,12 +84,32 @@ public class SplitAndSampling {
 			List<Instance> mediumRemain = findRemain(medium, mediumResample);
 			List<Instance> largeRemain = findRemain(large, largeResample);
 			
+			Instances tmp = smallResample;
 			
+			for(int i = 0 ; i < mediumResample.size() ; i++) {
+				tmp.add(mediumResample.get(i));
+			}
+			
+			for(int i = 0 ; i < largeResample.size() ; i++) {
+				tmp.add(largeResample.get(i));
+			}
+			
+			System.out.println(tmp.size() + "\n");
+			for(int i = 0 ; i < tmp.size() ; i++) {
+				System.out.println(tmp.get(i));
+			}
 			
 		}catch (Exception e) {
 			System.out.println("Error exception : " + e);
 		}
 		
+	}
+	
+	public static void printInstances(Instances data) {
+		for(int i = 0 ; i < data.size() ; i++) {
+			System.out.println(data.get(i));
+		}
+		System.out.println("Size of Data : " + data.size());
 	}
 	
 	public static List<Instance> findRemain(Instances data, Instances sampledData){
@@ -108,14 +129,6 @@ public class SplitAndSampling {
 		
 		return remain;
 	}
-	
-	public static void printInstances(Instances data) {
-		for(int i = 0 ; i < data.size() ; i++) {
-			System.out.println(data.get(i));
-		}
-		System.out.println("Size of Data : " + data.size());
-	}
-	
 	
 	public static Instances[] split(Instances data, double p) throws Exception {
 		Randomize rand = new Randomize();
