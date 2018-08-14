@@ -24,10 +24,10 @@ public class Main {
 	static double[] sumHoldOutResult;
 	static double[] holdOutResult;
 	static Instances[] sampleData;
-	
+
 
 	public static void main (String[]args) throws Exception{
-		
+
 		source = new DataSource(fileLocation);
 		Instances dataset_ID = source.getDataSet();
 		RemoveByName rbName = new RemoveByName();
@@ -36,44 +36,47 @@ public class Main {
 		dataset = Filter.useFilter(dataset_ID, rbName);
 		dataset.setClassIndex(dataset.numAttributes()-1);
 		
-		splitAndSampling = new SplitAndSampling(dataset);
-		
-		//Get the result of split and sample data form SplitAndSampling class.
-		sampleData = splitAndSampling.getResult();
-		Instances combineResample = sampleData[0];
-		Instances combineRemain = sampleData[1];
-		
-		LinearRegression lrResample = new LinearRegression();
-		lrResample.buildClassifier(combineResample);
-		
-		Evaluation eval = new Evaluation(combineResample);
-		eval.evaluateModel(lrResample, combineRemain);
-		
-		crossValidation(combineResample);
-		holdOut(combineResample);
-		
+		for(int i = 0 ; i < 1000 ; i++) {
+			splitAndSampling = new SplitAndSampling(dataset);
+
+			//Get the result of split and sample data form SplitAndSampling class.
+			sampleData = splitAndSampling.getResult();
+			Instances combineResample = sampleData[0];
+			Instances combineRemain = sampleData[1];
+
+			LinearRegression lrResample = new LinearRegression();
+			lrResample.buildClassifier(combineResample);
+
+			Evaluation eval = new Evaluation(combineResample);
+			eval.evaluateModel(lrResample, combineRemain);
+
+			crossValidation(combineResample);
+			holdOut(combineResample);
+		}
+
+
 	}
-	
+
 	public static void crossValidation(Instances dataset) throws Exception {
 		seed = 1;
 		folds = 10;
 		rand = new Random();
-		
+
 		LinearRegression lr = new LinearRegression();
 		lr.buildClassifier(dataset);
 		System.out.println("Evaluation Cross Validate model");
 		Evaluation crossEvaluation = new Evaluation(dataset);
 		crossEvaluation.crossValidateModel(lr, dataset, folds, rand);
 		System.out.println(crossEvaluation.toSummaryString());
-		
-		
+
+
 		System.out.println("Evaluate Linear Regression");
 		Evaluation evaluation = new Evaluation(dataset);
 		evaluation.evaluateModel(lr, dataset);
 		System.out.println(evaluation.toSummaryString());
-		
+
 	}
-	
+
 	public static void holdOut(Instances dataset) throws Exception{
 		repeat = 100;
 		folds = 10;
@@ -123,10 +126,10 @@ public class Main {
 
 			System.out.println("Use Linear Regression to evaluate the holdout test data");
 			System.out.println(evalTest.toSummaryString());
-			
+
 
 			predict = ArrayUtils.addAll(pred_0, pred_1);
-			
+
 			result = 0;
 			for(int j = 0 ; j < predict.length ; j++) {
 				result += Math.abs(predict[j]-actual[j]);
@@ -134,16 +137,16 @@ public class Main {
 			resultAvg[i] = result / actual.length;
 
 		}
-		
+
 		sum = 0;
 		for(int i = 0 ; i<resultAvg.length ; i++) {
 			sum += resultAvg[i];
 		}
 		sum = sum / resultAvg.length;
-		
+
 		System.out.println("The result of all loop: " + sum);
 	}
-	
+
 	public static Instances[] splitTrainTest(Instances data, double p) throws Exception {
 
 		Randomize rand = new Randomize();
