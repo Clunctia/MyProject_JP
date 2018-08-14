@@ -22,6 +22,7 @@ public class Main {
 	static DataSource source;
 	static double[] resultAvg;
 	static double[] sumHoldOutResult;
+	static double[] holdOutResult;
 	static Instances[] sampleData;
 	
 
@@ -34,7 +35,6 @@ public class Main {
 		rbName.setInputFormat(dataset_ID);
 		dataset = Filter.useFilter(dataset_ID, rbName);
 		dataset.setClassIndex(dataset.numAttributes()-1);
-		
 		
 		splitAndSampling = new SplitAndSampling(dataset);
 		
@@ -51,6 +51,7 @@ public class Main {
 		
 		crossValidation(combineResample);
 		holdOut(combineResample);
+		
 	}
 	
 	public static void crossValidation(Instances dataset) throws Exception {
