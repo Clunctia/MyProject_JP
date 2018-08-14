@@ -8,6 +8,7 @@ import weka.attributeSelection.HoldOutSubsetEvaluator;
 import weka.classifiers.Classifier;
 import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.functions.LinearRegression;
+import weka.core.Attribute;
 import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -22,86 +23,67 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.math.*;
 
 public class SplitAndSampling {
-	static String fileLocation;
-	static Instances dataset;
-	static int repeat;
-	static int folds;
-	static Random rand;
-	static DataSource source;
-	static double[] resultAvg;
+	Instances dataset;
+	Instances[] result;
+	Random rand;
 	
-	public static void main(String[] args) {
-		try {
-			fileLocation = "./data/miyazaki94.arff";
-			source = new DataSource(fileLocation);
-			Instances dataset_ID = source.getDataSet();
-			RemoveByName rbName = new RemoveByName();
-			rbName.setExpression("ID");
-			rbName.setInputFormat(dataset_ID);
-			dataset = Filter.useFilter(dataset_ID, rbName);
-			dataset.setClassIndex(dataset.numAttributes()-1);
-			
-			System.out.println("Size of all data: " + dataset.size() + "\n");
-			
-			Instances splited[] = splitIntoThree(dataset);
-			
-			Randomize randomize = new Randomize();
-			rand = new Random();
-			randomize.setRandomSeed(rand.nextInt());
-			randomize.setInputFormat(dataset);
-			
-			Instances small = splited[0];
-			Instances medium = splited[1];
-			Instances large = splited[2];
-			
-			Instances smallResample, mediumResample, largeResample;
-			
-			double sizePercentage = 70;
-			
-			Resample re = new Resample();
-			
-			re.setInputFormat(small);
-			re.setRandomSeed(rand.nextInt());
-			re.setNoReplacement(true);
-			re.setSampleSizePercent(sizePercentage);
-			smallResample = Filter.useFilter(small, re);
-			
-			re.setInputFormat(medium);
-			re.setRandomSeed(rand.nextInt());
-			re.setNoReplacement(true);
-			re.setSampleSizePercent(sizePercentage);
-			mediumResample = Filter.useFilter(medium, re);
-			
-			re.setInputFormat(large);
-			re.setRandomSeed(rand.nextInt());
-			re.setNoReplacement(true);
-			re.setSampleSizePercent(sizePercentage);
-			largeResample = Filter.useFilter(large, re);
-			
-			//Extract the unseen data that not in the random sampling data set
-			
-			List<Instance> smallRemain = findRemain(small, smallResample);
-			List<Instance> mediumRemain = findRemain(medium, mediumResample);
-			List<Instance> largeRemain = findRemain(large, largeResample);
-			
-			Instances tmp = smallResample;
-			
-			for(int i = 0 ; i < mediumResample.size() ; i++) {
-				tmp.add(mediumResample.get(i));
-			}
-			
-			for(int i = 0 ; i < largeResample.size() ; i++) {
-				tmp.add(largeResample.get(i));
-			}
-			
-			System.out.println(tmp.size() + "\n");
-			for(int i = 0 ; i < tmp.size() ; i++) {
-				System.out.println(tmp.get(i));
-			}
-			
-		}catch (Exception e) {
-			System.out.println("Error exception : " + e);
-		}
+	static int repeat;
+	
+	public Instances[] getResult() {
+		return result;
+	}
+	
+	
+	public SplitAndSampling(Instances dataset) throws Exception{
+		this.dataset = dataset;
+		this.rand = new Random();
+		this.result = this.splitAndCombine();
+	}
+	
+	public Instances[] splitAndCombine() throws Exception {
+		Instances splited[] = splitIntoThree(dataset);
+		
+		Randomize randomize = new Randomize();
+		randomize.setRandomSeed(rand.nextInt());
+		randomize.setInputFormat(dataset);
+		
+		Instances small = splited[0];
+		Instances medium = splited[1];
+		Instances large = splited[2];
+		
+		Instances smallResample, mediumResample, largeResample;
+		
+		double sizePercentage = 70;
+		
+		Resample re = new Resample();
+		re.setInputFormat(small);
+		re.setRandomSeed(rand.nextInt());
+		re.setNoReplacement(true);
+		re.setSampleSizePercent(sizePercentage);
+		smallResample = Filter.useFilter(small, re);
+		
+		re.setInputFormat(medium);
+		re.setRandomSeed(rand.nextInt());
+		re.setNoReplacement(true);
+		re.setSampleSizePercent(sizePercentage);
+		mediumResample = Filter.useFilter(medium, re);
+		
+		re.setInputFormat(large);
+		re.setRandomSeed(rand.nextInt());
+		re.setNoReplacement(true);
+		re.setSampleSizePercent(sizePercentage);
+		largeResample = Filter.useFilter(large, re);
+		
+		//Extract the unseen data that not in the random sampling data set
+		Instances smallRemain = findRemain(small, smallResample);
+		Instances mediumRemain = findRemain(medium, mediumResample);
+		Instances largeRemain = findRemain(large, largeResample);
+		
+		Instances combineResample = combineInstances(smallResample, mediumResample, largeResample);
+		
+		Instances combineRemain = combineInstances(smallRemain, mediumRemain, largeRemain);
+		
+		return new Instances[] {combineResample, combineRemain};
 		
 	}
 	
@@ -112,8 +94,24 @@ public class SplitAndSampling {
 		System.out.println("Size of Data : " + data.size());
 	}
 	
-	public static List<Instance> findRemain(Instances data, Instances sampledData){
-		List<Instance> remain = new ArrayList<Instance>();
+	public static Instances combineInstances(Instances data1, Instances data2, Instances data3) {
+		Instances result = new Instances(data1);
+		
+		for(int i = 0 ; i < data2.size() ; i++) {
+			result.add(data2.get(i));
+		}
+		
+		for(int i = 0 ; i < data3.size() ; i++) {
+			result.add(data3.get(i));
+		}
+		
+		return result;
+	}
+	
+	public static Instances findRemain(Instances data, Instances sampledData){
+		Instances result = new Instances(data);
+		result.delete();
+		
 		boolean contains = false;
 		
 		for(int i = 0 ; i < data.size(); i++){
@@ -123,11 +121,11 @@ public class SplitAndSampling {
 					break;
 				}
 			}
-			if(!contains) remain.add(data.get(i));
+			if(!contains) result.add(data.get(i));
 			else contains = false;
 		}
 		
-		return remain;
+		return result;
 	}
 	
 	public static Instances[] split(Instances data, double p) throws Exception {
@@ -180,4 +178,5 @@ public class SplitAndSampling {
 				
 		return new Instances[] {small, medium, large};
 	}
+
 }

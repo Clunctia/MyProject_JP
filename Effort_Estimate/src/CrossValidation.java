@@ -14,7 +14,6 @@ public class CrossValidation {
 	static int folds;
 	static Random rand;
 	static DataSource source;
-	static Classifier classiFier;
 	
 		
 	public static void main(String[]args) {
