@@ -22,12 +22,10 @@ public class Main {
 	static Random rand;
 	static DataSource source;
 	static double[] resultAvg;
-	static double[] holdOutResult;
+	static double[] holdOutAbs;
 	static double[] crossValidationMeanAbsolute;
 	static double[] crossValidationEvalMeanAbsolute;
 	static double[] evalMeanAbs;
-	static double[] bias;
-	static double[] variance;
 	static Instances[] sampleData;
 
 	public static void main (String[]args) throws Exception{
@@ -38,18 +36,16 @@ public class Main {
 		rbName.setInputFormat(dataset_ID);
 		dataset = Filter.useFilter(dataset_ID, rbName);
 		dataset.setClassIndex(dataset.numAttributes()-1);
-		
+
 		BVDecompose bvd = new BVDecompose();
-		
-		
+
+
 		int n = 1000;
-		bias = new double[n];
 		evalMeanAbs = new double[n];
-		holdOutResult = new double[n];
-		variance = new double[n];
+		holdOutAbs = new double[n];
 		crossValidationMeanAbsolute = new double[n];
 		crossValidationEvalMeanAbsolute = new double[n];
-		
+
 		for(int i = 0 ; i < n ; i++) {
 			splitAndSampling = new SplitAndSampling(dataset);
 
@@ -63,27 +59,68 @@ public class Main {
 
 			Evaluation eval = new Evaluation(combineResample);
 			eval.evaluateModel(lrResample, combineRemain);
-			
-			bvd.setClassifier(lrResample);
-			
-			bias[i] = bvd.getBias();
-			variance[i] = bvd.getVariance();
-			
+
 			evalMeanAbs[i] = eval.meanAbsoluteError();
-			
-			holdOutResult[i] = holdOut(combineResample);
-			
+
+			holdOutAbs[i] = holdOut(combineResample);
+
 			double[] tmp = crossValidation(combineResample);
 			crossValidationMeanAbsolute[i] = tmp[0];
-			crossValidationEvalMeanAbsolute[i] = tmp[1];
 		}
 		//End 1000 loop
 		//Calclate the performance and compare.
-		Statistics statEval = new Statistics(evalMeanAbs);
-		Statistics statHoldOut = new Statistics(holdOutResult);
-		Statistics statCrossMeanAbs = new Statistics(crossValidationMeanAbsolute);
-		Statistics statCrossEvalMeanAbs = new Statistics(crossValidationMeanAbsolute);
 
+		double bias_cv = 0.0;
+		for ( int i = 0; i < n; i++) {
+			bias_cv += Math.abs(evalMeanAbs[i] - crossValidationMeanAbsolute[i]);
+		}
+		bias_cv /= 1000.0;
+
+		double bias_ho = 0.0;
+		for(int i = 0 ; i < n ; i++) {
+			bias_ho += Math.abs(evalMeanAbs[i] - holdOutAbs[i]);
+		}
+		bias_ho /= 1000.0;
+
+		//Variance with 100 MAEs
+		double[] cvMAEs = new double[100];
+		for(int i = 0 ; i < 100 ; i++) {
+			cvMAEs[i] = crossValidationMeanAbsolute[i];
+		}
+
+		double[] hoMAEs = new double[100];
+		for(int i = 0 ; i < 100 ; i++) {
+			hoMAEs[i] = holdOutAbs[i];
+		}
+
+		double var_cv = 0.0;
+		var_cv = getVariance(cvMAEs);
+
+
+		double var_ho = 0.0;
+		var_ho = getVariance(hoMAEs);
+
+		System.out.println("Bias of CV: " + bias_cv);
+		System.out.println("Bias of HO: " + bias_ho);
+		System.out.println("Variance of CV: " + var_cv);
+		System.out.println("Variance of HO: " + var_ho);
+	}
+
+	public static double getVariance(double[] data) {
+		int size = data.length;
+		double mean = getMean(data);
+		double temp = 0;
+		for(double a :data)
+			temp += (a-mean)*(a-mean);
+		return temp/(size-1);
+	}
+
+	public static double getMean(double[] data) {
+		int size = data.length;
+		double sum = 0.0;
+		for(double a : data)
+			sum += a;
+		return sum/size;
 	}
 
 	public static double[] crossValidation(Instances dataset) throws Exception {
@@ -93,16 +130,16 @@ public class Main {
 
 		LinearRegression lr = new LinearRegression();
 		lr.buildClassifier(dataset);
-//		System.out.println("Evaluation Cross Validate model");
+		//		System.out.println("Evaluation Cross Validate model");
 		Evaluation crossEvaluation = new Evaluation(dataset);
 		crossEvaluation.crossValidateModel(lr, dataset, folds, rand);
-//		System.out.println(crossEvaluation.toSummaryString());
+		//		System.out.println(crossEvaluation.toSummaryString());
 
-//		System.out.println("Evaluate Linear Regression");
+		//		System.out.println("Evaluate Linear Regression");
 		Evaluation evaluation = new Evaluation(dataset);
 		evaluation.evaluateModel(lr, dataset);
-//		System.out.println(evaluation.toSummaryString());
-		
+		//		System.out.println(evaluation.toSummaryString());
+
 		return new double[] {crossEvaluation.meanAbsoluteError(), evaluation.meanAbsoluteError()};
 	}
 
@@ -110,7 +147,7 @@ public class Main {
 		repeat = 100;
 		folds = 10;
 		resultAvg = new double[repeat];
-		double percent = 50, result = 0, sum = 0;
+		double percent = 50, result = 0, MAEs = 0;
 		double[] actual_0;
 		double[] actual_1;
 		double[] actual;
@@ -142,9 +179,9 @@ public class Main {
 
 			pred_1 = evalTrain.evaluateModel(lrTrain, test);
 
-//			System.out.println("Use Linear Regression to evaluate the holdout train data");
-//			System.out.println(evalTrain.toSummaryString());
-//			System.out.println("------------------------------------------------");
+			//			System.out.println("Use Linear Regression to evaluate the holdout train data");
+			//			System.out.println(evalTrain.toSummaryString());
+			//			System.out.println("------------------------------------------------");
 
 			lrTest = new LinearRegression();
 			lrTest.buildClassifier(test);
@@ -153,8 +190,8 @@ public class Main {
 			Evaluation evalTest = new Evaluation(test);
 			pred_0 = evalTest.evaluateModel(lrTest, train);
 
-//			System.out.println("Use Linear Regression to evaluate the holdout test data");
-//			System.out.println(evalTest.toSummaryString());
+			//			System.out.println("Use Linear Regression to evaluate the holdout test data");
+			//			System.out.println(evalTest.toSummaryString());
 
 
 			predict = ArrayUtils.addAll(pred_0, pred_1);
@@ -167,14 +204,14 @@ public class Main {
 
 		}
 
-		sum = 0;
+		MAEs = 0;
 		for(int i = 0 ; i<resultAvg.length ; i++) {
-			sum += resultAvg[i];
+			MAEs += resultAvg[i];
 		}
-		sum = sum / resultAvg.length;
-//		System.out.println("The result of all loop: " + sum);
-		
-		return sum;
+		MAEs = MAEs / resultAvg.length;
+		//		System.out.println("The result of all loop: " + sum);
+
+		return MAEs;
 	}
 
 	public static Instances[] splitTrainTest(Instances data, double p) throws Exception {
@@ -198,6 +235,6 @@ public class Main {
 
 		return new Instances[] {train, test};
 	}
-	
-	
+
+
 }
