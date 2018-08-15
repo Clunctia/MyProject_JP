@@ -1,20 +1,14 @@
 import java.util.Random;
-
-import weka.attributeSelection.HoldOutSubsetEvaluator;
-import weka.classifiers.Classifier;
 import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.functions.LinearRegression;
-import weka.core.DenseInstance;
-import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.RemoveByName;
 import weka.filters.unsupervised.instance.Randomize;
 import weka.filters.unsupervised.instance.RemovePercentage;
-
-import java.util.Arrays;
 import org.apache.commons.lang3.ArrayUtils;
+
 public class HoldOut {
 	static String fileLocation = "./data/miyazaki94.arff";
 	static Instances dataset;
