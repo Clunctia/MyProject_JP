@@ -4,8 +4,11 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import weka.classifiers.BVDecompose;
 import weka.classifiers.evaluation.Evaluation;
+import weka.classifiers.functions.LibSVM;
 import weka.classifiers.functions.LinearRegression;
+import weka.classifiers.meta.CVParameterSelection;
 import weka.core.Instances;
+import weka.core.SelectedTag;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.RemoveByName;
@@ -16,6 +19,7 @@ public class Main {
 	static SplitAndSampling splitAndSampling;
 	static Instances dataset;
 	static String fileLocation = "./data/miyazaki94.arff";
+	static String fileLocation2 = "./data/china.arff";
 	static int repeat;
 	static int folds;
 	static int seed;
@@ -26,23 +30,32 @@ public class Main {
 	static double[] crossValidationMeanAbsolute;
 	static double[] crossValidationEvalMeanAbsolute;
 	static double[] evalMeanAbs;
+	static double[] libMeanAbs;
 	static Instances[] sampleData;
 
 	public static void main (String[]args) throws Exception{
-		source = new DataSource(fileLocation);
+		source = new DataSource(fileLocation2);
 		Instances dataset_ID = source.getDataSet();
+		Instances dataset_Duration;
+		Instances dataset_N_effort;
 		RemoveByName rbName = new RemoveByName();
+		RemoveByName rbName1 = new RemoveByName();
+		RemoveByName rbName2 = new RemoveByName();
 		rbName.setExpression("ID");
 		rbName.setInputFormat(dataset_ID);
-		dataset = Filter.useFilter(dataset_ID, rbName);
+		dataset_Duration = Filter.useFilter(dataset_ID, rbName);
+		rbName1.setExpression("Duration");
+		rbName1.setInputFormat(dataset_Duration);
+		dataset_N_effort = Filter.useFilter(dataset_Duration, rbName1);
+		rbName2.setExpression("N_effort");
+		rbName2.setInputFormat(dataset_N_effort);
+		dataset = Filter.useFilter(dataset_N_effort, rbName2);
 		dataset.setClassIndex(dataset.numAttributes()-1);
-
-		BVDecompose bvd = new BVDecompose();
-
 
 		int n = 1000;
 		evalMeanAbs = new double[n];
 		holdOutAbs = new double[n];
+		libMeanAbs = new double[n];
 		crossValidationMeanAbsolute = new double[n];
 		crossValidationEvalMeanAbsolute = new double[n];
 
@@ -54,21 +67,15 @@ public class Main {
 			Instances combineResample = sampleData[0];
 			Instances combineRemain = sampleData[1];
 
-			LinearRegression lrResample = new LinearRegression();
-			lrResample.buildClassifier(combineResample);
-
-			Evaluation eval = new Evaluation(combineResample);
-			eval.evaluateModel(lrResample, combineRemain);
-
-			evalMeanAbs[i] = eval.meanAbsoluteError();
+			//evalMeanAbs[i] = EvalWithLibSVM(combineResample, combineRemain);
+			evalMeanAbs[i] = EvalWithLR(combineResample, combineRemain);
 
 			holdOutAbs[i] = holdOut(combineResample);
-
-			double[] tmp = crossValidation(combineResample);
-			crossValidationMeanAbsolute[i] = tmp[0];
+			crossValidationMeanAbsolute[i] = crossValidation(combineResample);
 		}
+
 		//End 1000 loop
-		//Calclate the performance and compare.
+		//Calculate the performance and compare.
 
 		double bias_cv = 0.0;
 		for ( int i = 0; i < n; i++) {
@@ -82,23 +89,11 @@ public class Main {
 		}
 		bias_ho /= 1000.0;
 
-		//Variance with 100 MAEs
-		double[] cvMAEs = new double[100];
-		for(int i = 0 ; i < 100 ; i++) {
-			cvMAEs[i] = crossValidationMeanAbsolute[i];
-		}
-
-		double[] hoMAEs = new double[100];
-		for(int i = 0 ; i < 100 ; i++) {
-			hoMAEs[i] = holdOutAbs[i];
-		}
-
 		double var_cv = 0.0;
-		var_cv = getVariance(cvMAEs);
-
+		var_cv = getVariance(crossValidationMeanAbsolute);
 
 		double var_ho = 0.0;
-		var_ho = getVariance(hoMAEs);
+		var_ho = getVariance(holdOutAbs);
 
 		System.out.println("Bias of CV: " + bias_cv);
 		System.out.println("Bias of HO: " + bias_ho);
@@ -123,8 +118,25 @@ public class Main {
 		return sum/size;
 	}
 
-	public static double[] crossValidation(Instances dataset) throws Exception {
-		seed = 1;
+	public static double EvalWithLibSVM(Instances training, Instances testing) throws Exception {
+		LibSVM svm = new LibSVM();
+		svm.setSVMType(new SelectedTag(LibSVM.SVMTYPE_EPSILON_SVR, LibSVM.TAGS_SVMTYPE));
+		svm.buildClassifier(training);
+
+		Evaluation eval = new Evaluation(training);
+		eval.evaluateModel(svm, testing);
+		return eval.meanAbsoluteError();
+	}
+
+	public static double EvalWithLR(Instances training, Instances testing) throws Exception {
+		LinearRegression lr = new LinearRegression();
+		lr.buildClassifier(training);
+		Evaluation eval = new Evaluation(training);		
+		eval.evaluateModel(lr, testing);
+		return eval.meanAbsoluteError();
+	}
+
+	public static double crossValidation(Instances dataset) throws Exception {
 		folds = 10;
 		rand = new Random();
 
@@ -135,18 +147,13 @@ public class Main {
 		crossEvaluation.crossValidateModel(lr, dataset, folds, rand);
 		//		System.out.println(crossEvaluation.toSummaryString());
 
-		//		System.out.println("Evaluate Linear Regression");
-		Evaluation evaluation = new Evaluation(dataset);
-		evaluation.evaluateModel(lr, dataset);
-		//		System.out.println(evaluation.toSummaryString());
-
-		return new double[] {crossEvaluation.meanAbsoluteError(), evaluation.meanAbsoluteError()};
+		return crossEvaluation.meanAbsoluteError();
 	}
 
 	public static double holdOut(Instances dataset) throws Exception{
 		repeat = 100;
-		folds = 10;
 		resultAvg = new double[repeat];
+		//MAEs = Mean Absolute Errors
 		double percent = 50, result = 0, MAEs = 0;
 		double[] actual_0;
 		double[] actual_1;
