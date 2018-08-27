@@ -44,11 +44,14 @@ public class Main {
 		rbName.setExpression("ID");
 		rbName.setInputFormat(dataset_ID);
 		dataset_Duration = Filter.useFilter(dataset_ID, rbName);
+		//comment this section out if change to miyazaki94.arff
 		rbName1.setExpression("Duration");
 		rbName1.setInputFormat(dataset_Duration);
 		dataset_N_effort = Filter.useFilter(dataset_Duration, rbName1);
 		rbName2.setExpression("N_effort");
 		rbName2.setInputFormat(dataset_N_effort);
+		//---------------------------------------------
+		//and change the file to use only ID
 		dataset = Filter.useFilter(dataset_N_effort, rbName2);
 		dataset.setClassIndex(dataset.numAttributes()-1);
 
@@ -167,40 +170,28 @@ public class Main {
 
 		for(int i = 0 ; i < repeat ; i++) {
 			split = splitTrainTest(dataset, percent);
-
 			//save to this 2 arrays
 			train = split[0];
 			test = split[1];
-
 			//get the last column of the Instances array is it an actual value?.
 			actual_0 = train.attributeToDoubleArray(train.numAttributes()-1);
 			actual_1= test.attributeToDoubleArray(test.numAttributes()-1);
-
 			actual = ArrayUtils.addAll(actual_0, actual_1);
-
 			lrTrain = new LinearRegression();
 			lrTrain.buildClassifier(train);
-
 			//Predict
 			Evaluation evalTrain = new Evaluation(train);
-
 			pred_1 = evalTrain.evaluateModel(lrTrain, test);
-
 			//			System.out.println("Use Linear Regression to evaluate the holdout train data");
 			//			System.out.println(evalTrain.toSummaryString());
 			//			System.out.println("------------------------------------------------");
-
 			lrTest = new LinearRegression();
 			lrTest.buildClassifier(test);
-
 			//Predict
 			Evaluation evalTest = new Evaluation(test);
 			pred_0 = evalTest.evaluateModel(lrTest, train);
-
 			//			System.out.println("Use Linear Regression to evaluate the holdout test data");
 			//			System.out.println(evalTest.toSummaryString());
-
-
 			predict = ArrayUtils.addAll(pred_0, pred_1);
 
 			result = 0;

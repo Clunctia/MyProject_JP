@@ -5,7 +5,6 @@
 <fullyQualifiedTypeName name="weka.classifiers.bayes.NaiveBayes"/>
 <fullyQualifiedTypeName name="libsvm.svm"/>
 <fullyQualifiedTypeName name="weka.classifiers.AbstractClassifier"/>
-<fullyQualifiedTypeName name="weka.classifiers.functions.LibSVM"/>
 <fullyQualifiedTypeName name="weka.core.SelectedTag"/>
 <fullyQualifiedTypeName name="weka.classifiers.meta.AdaBoostM1"/>
 <fullyQualifiedTypeName name="weka.core.Utils"/>
@@ -32,4 +31,5 @@
 <fullyQualifiedTypeName name="weka.core.Attribute"/>
 <fullyQualifiedTypeName name="weka.classifiers.BVDecompose"/>
 <fullyQualifiedTypeName name="java.util.Arrays"/>
+<fullyQualifiedTypeName name="weka.classifiers.functions.LibSVM"/>
 </qualifiedTypeNameHistroy>
